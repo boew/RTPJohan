@@ -5,8 +5,6 @@ import analogio
 downThreshold = 900
 upThreshold = 1200
 light = analogio.AnalogIn(board.LIGHT)
-
-print(light.value)
 while True:
     tid_ljus=[]
     lv = light.value
