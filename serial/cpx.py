@@ -15,10 +15,6 @@ def doLog(when, msg_line):
         print(msg, msg_line, file=logfile)
     print(msg, msg_line)
 
-    #https://learn.adafruit.com/welcome-to-circuitpython/advanced-serial-console-on-linux
-    # 115 200 bps
-    # BoE: 10s timeout
-
 def main():
     t00 = False
     ntds = 4
@@ -35,20 +31,20 @@ def main():
             if (t00):
                 tds[tdsindex]  = (t0 - t00).seconds 
                 tds[tdsindex] += (t0 - t00).microseconds / 1000000
-                msg  = f'Värde {tdsindex + 1}/{ntds} @ '
+                #msg  = f'{tdsindex + 1}/{ntds}'
+                #print(msg, end = ' ')
                 tdsindex += 1
                 tdsindex %= ntds
                 if (0 == tdsindex):
                     tdsfilled = True
                 if (tdsfilled):
-                    msg = f'{ntds}-medel: {tds.mean()}'
-            msg += t0.strftime("%Y-%m-%d\t%H:%M:%S")
+                    msg  = t0.strftime("%Y-%m-%d;\t%H:%M:%S")
+                    msg += f';\t {ntds}'
+                    msg += f';\t {round( tds.mean(), 2) }'
+                    msg += f';\t {round( 3.6 / tds.mean(), 2) }'
+                    print(msg)
+                    tdsfilled=False
             t00 = t0
-            #(lv0,) = struct.unpack('<H',r0)
-            #(lv1,) = struct.unpack('<H',r1)
-            print(msg)
-            #print(lv0, lv1, end = '\t')
-            #doLog(datetime.datetime.now(), lv0, lv1)
                 
                 
 if ('__main__' == __name__) :

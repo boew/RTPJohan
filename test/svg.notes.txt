@@ -1,0 +1,10 @@
+https://stackoverflow.com/questions/1077041/refresh-image-with-a-new-one-at-the-same-url/66312176#66312176
+
+fetch("my-image-url.jpg", {cache: 'reload', mode: 'no-cors'})
+
+The following function will update the cache and reload your image everywhere in your page:
+
+const reloadImg = url =>
+  fetch(url, { cache: 'reload', mode: 'no-cors' })
+  .then(() => document.body.querySelectorAll(`img[src='${url}']`)
+              .forEach(img => img.src = url))

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<head>
+  <title>RealTimePowerJohan</title>
+  <script>
+    let n = 0
+    let names=['line8.svg','line16.svg']
+    let line='line.svg'
+    function refresh() {
+        //line = names[n]
+        n += 1
+        n %= names.length
+        //fetch(line + '?=123', { cache: 'reload', mode: 'no-cors' })
+	fetch(line)
+            .then((r) => {
+		console.log(r)
+		new_img = document.createElement('img')
+		new_img.height = "400"
+		new_img.src = "line.svg"
+		old_img = document.getElementById('imgdiv').children[0]
+		old_img.replaceWith(new_img)
+		console.log(line)
+            })
+        //window.location.reload();
+    }
+    window.addEventListener('load', (event) => {
+        window.setInterval('refresh()', 4000);  
+        console.log('page is fully loaded');
+    });    
+</script>
+</head>
+<body>
+  <h2> Real Time Power Logging Graph </h2>
+  <div id = imgdiv>
+  <img
+    src="line.svg"
+    alt="lineplot from matplotlib for test"
+    height="400"
+    />
+  </div>
+  <h2> Real Time Power Logging Log </h2>
+  <a href="data/log.txt"> log.txt </a>
+</body>
+</html>
