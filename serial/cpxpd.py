@@ -32,8 +32,8 @@ if True:
             print(msg, file=logfile)
 
     def mPlot():
-        tmpPath = Path('tmp_mplot.svg')
-        realPath = Path('mplot.svg')
+        tmpPath = Path('../test/tmp_mplot.svg')
+        realPath = Path('../test/mplot.svg')
         srmplt = sr_m.plot()
         srmpltTitle  = 'mplot '
         srmpltTitle += dt.datetime.now().strftime(formatString)
@@ -44,13 +44,25 @@ if True:
         tmpPath.replace(realPath)
 
     def hPlot():
-        tmpPath = Path('tmp_hplot.svg')
-        realPath = Path('hplot.svg')
+        tmpPath = Path('../test/tmp_hplot.svg')
+        realPath = Path('../test/hplot.svg')
         srhplt = sr_h.plot()
-        srhpltTitle  = 'mplot '
+        srhpltTitle  = 'hplot '
         srhpltTitle += dt.datetime.now().strftime(formatString)
         print(srhpltTitle)        
         srhplt.set_title(srhpltTitle)
+        plt.savefig(tmpPath)
+        plt.cla()
+        tmpPath.replace(realPath)
+
+    def dPlot():
+        tmpPath = Path('../test/tmp_dplot.svg')
+        realPath = Path('../test/dplot.svg')
+        srdplt = sr_d.plot()
+        srdpltTitle  = 'dplot '
+        srdpltTitle += dt.datetime.now().strftime(formatString)
+        print(srdpltTitle)        
+        srdplt.set_title(srdpltTitle)
         plt.savefig(tmpPath)
         plt.cla()
         tmpPath.replace(realPath)
