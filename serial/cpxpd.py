@@ -6,36 +6,57 @@ import struct
 import matplotlib.pyplot as plt
 import pandas as pd
 from pathlib import Path
-import array    
+
+formatString = "%Y-%m-%d %H:%M:%S"
+# 2022-09-11 12:12:01
+#    Y  m  d  H  M  S    
+
 #def main():
 if True:
-    def doLog(p1,p2):
-        formatString = "%Y-%m-%d; %H:%M:%S"
-        # 2022-09-11	12:12:01
-        #    Y  m  d         H  M  S
+    def syncOrExit(sp):
+        syncBytes = 'cpxpdStart'.encode('utf-8')
+        sp.write(syncBytes)
+        cr = None
+        for cs in syncBytes:
+            maxCount = struct.calcsize('HHQQ')
+            while (bytes([cs]) != cr):
+                cr = sp.read()
+                maxCount -= 1
+                if (0 >= maxCount):
+                    sys.exit('Oooops - startSync failed!')
+
+    def doLog(idx, td):
         msg = dt.datetime.now().strftime(formatString)
-        msg += "; " + str(p1) + "; " + str(p2)
+        msg += "; " + str(idx) + ", " + str(td)
         with open('cpxpd_log.txt', 'a') as logfile:
             print(msg, file=logfile)
 
-    def doPlot():
-        tmpPath = Path('tmp_line.svg')
-        realPath = Path('line.svg')
-        formatString = "%Y-%m-%d %H:%M:%S"
-        # 2022-09-11	12:12:01
-        #    Y  m  d         H  M  S    
+    def mPlot():
+        tmpPath = Path('tmp_mplot.svg')
+        realPath = Path('mplot.svg')
+        srmplt = sr_m.plot()
+        srmpltTitle  = 'mplot '
+        srmpltTitle += dt.datetime.now().strftime(formatString)
+        print(srmpltTitle)
+        srmplt.set_title(srmpltTitle)
+        plt.savefig(tmpPath)
+        plt.cla()
+        tmpPath.replace(realPath)
+
+    def hPlot():
+        tmpPath = Path('tmp_hplot.svg')
+        realPath = Path('hplot.svg')
         srhplt = sr_h.plot()
-        srhpltTitle = dt.datetime.now().strftime(formatString)
-        # print(srhpltTitle[:8])
-        # print(srhpltTitle[8])
-        # print(srhpltTitle[9])
-        # print(srhpltTitle[10:])
+        srhpltTitle  = 'mplot '
+        srhpltTitle += dt.datetime.now().strftime(formatString)
+        print(srhpltTitle)        
         srhplt.set_title(srhpltTitle)
         plt.savefig(tmpPath)
         plt.cla()
         tmpPath.replace(realPath)
-    m_max = 4 #16
-    h_max = 45
+
+    m_max = 16 #16 
+    h_max = 45 #45
     d_max = 24
     sr_m = pd.Series([0.0]* m_max)         # 16 * ~5s <-> ~80 s
     sr_h = pd.Series([0.0]* h_max)         # 45 * ~80 s <-> ~1 h
@@ -43,40 +64,33 @@ if True:
     m_index=0
     h_index=0
     d_index=0
-    t00 = False
     m_filled = False
-    #with serial.Serial('/dev/ttyACM1', 115200, timeout=60) as sPort:
-    with serial.Serial('/dev/ttyACM1', 230400, timeout=60) as sPort:
+    print(f'{sys.argv[0]} @ {dt.datetime.now().strftime("%Y-%m-%d; %H:%M:%S")}')
+    with serial.Serial('/dev/ttyACM1', 115200) as sPort:
+        print('before syncOrExit')
+        syncOrExit(sPort)
+        print('after syncOrExit ')
         while True:
-            r0 = sPort.read(2)
-            t0 = dt.datetime.now()
-            r1 = sPort.read(2)
-            t1 = dt.datetime.now()
-            r2 = sPort.read(8)
-            tt0 = array.array('Q')
-            tt0.frombytes(r2)
-            tt0 = tt0.tolist()[0]
-            r3 = sPort.read(8)
-            tt1 = array.array('Q')
-            tt1.frombytes(r3)
-            tt1 = tt1.tolist()[0]
-            print(tt0,tt1, tt1 - tt0)
-            if (t00):
-                sr_m[m_index]  = (t0 - t00).seconds 
-                sr_m[m_index] += (t0 - t00).microseconds / 1000000
-                m_index += 1
-                m_index %= m_max
-                if (0 == m_index):
-                    sr_h[h_index] = sr_m.mean()
-                    doPlot()
-                    doLog(h_index, sr_h[h_index] )
-                    h_index += 1
-                    h_index %= h_max
-                    if (0 == h_index):
-                        sr_d[d_index] = sr_h.mean()
-                        d_index += 1
-                        d_index %= d_max
-            t00 = t0
+            r0 = sPort.read(8)
+            (tns0,) = struct.unpack('Q', r0)
+            r1 = sPort.read(8)
+            (tns1,) = struct.unpack('Q', r1)
+            td = (tns1 - tns0) // 1000000 # ns to ms
+            sr_m[m_index] = td / 1000
+            m_index += 1
+            m_index %= m_max
+            if (0 == m_index):
+                sr_h[h_index] = sr_m.mean()
+                mPlot()
+                doLog(h_index, sr_h[h_index])
+                h_index += 1
+                h_index %= h_max
+                if (0 == h_index):
+                    sr_d[d_index] = sr_h.mean()
+                    hPlot()
+                    d_index += 1
+                    d_index %= d_max
+
                 
                 
 # if ('__main__' == __name__) :
