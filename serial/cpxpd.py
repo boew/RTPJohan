@@ -6,7 +6,7 @@ import struct
 import matplotlib.pyplot as plt
 import pandas as pd
 from pathlib import Path
-    
+import array    
 #def main():
 if True:
     def doLog(p1,p2):
@@ -14,7 +14,7 @@ if True:
         # 2022-09-11	12:12:01
         #    Y  m  d         H  M  S
         msg = dt.datetime.now().strftime(formatString)
-        msg += "; " + str(p1) + str(p2)
+        msg += "; " + str(p1) + "; " + str(p2)
         with open('cpxpd_log.txt', 'a') as logfile:
             print(msg, file=logfile)
 
@@ -45,12 +45,22 @@ if True:
     d_index=0
     t00 = False
     m_filled = False
-    with serial.Serial('/dev/ttyACM1', 115200, timeout=60) as sPort:
+    #with serial.Serial('/dev/ttyACM1', 115200, timeout=60) as sPort:
+    with serial.Serial('/dev/ttyACM1', 230400, timeout=60) as sPort:
         while True:
             r0 = sPort.read(2)
             t0 = dt.datetime.now()
             r1 = sPort.read(2)
             t1 = dt.datetime.now()
+            r2 = sPort.read(8)
+            tt0 = array.array('Q')
+            tt0.frombytes(r2)
+            tt0 = tt0.tolist()[0]
+            r3 = sPort.read(8)
+            tt1 = array.array('Q')
+            tt1.frombytes(r3)
+            tt1 = tt1.tolist()[0]
+            print(tt0,tt1, tt1 - tt0)
             if (t00):
                 sr_m[m_index]  = (t0 - t00).seconds 
                 sr_m[m_index] += (t0 - t00).microseconds / 1000000
