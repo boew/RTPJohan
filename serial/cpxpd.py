@@ -27,15 +27,9 @@ if True:
                 if (0 >= maxCount):
                     sys.exit('Oooops - startSync failed!')
 
-    def doLog(idx, td):
-        msg = dt.datetime.now().strftime(formatString)
-        msg += "; " + str(idx) + ", " + str(td)
-        with open('cpxpd_log.txt', 'a') as logfile:
-            print(msg, file=logfile)
-
-    mT = MT.MhdTracker('m', 2, ['../test/','plot.svg'])      # 16 * ~5s <-> ~80 s  
-    hT = MT.MhdTracker('h', 3, ['../test/','plot.svg'])      # 45 * ~80 s <-> ~1 h 
-    dT = MT.MhdTracker('d', 4, ['../test/','plot.svg'])      # 24 * ~1 h <-> ~1 day
+    mT = MT.MhdTracker('m', 16, ['../test/','plot.svg', 'log.txt'])      # 16 * ~5s <-> ~80 s  
+    hT = MT.MhdTracker('h', 45, ['../test/','plot.svg', 'log.txt'])      # 45 * ~80 s <-> ~1 h 
+    dT = MT.MhdTracker('d', 24, ['../test/','plot.svg', 'log.txt'])      # 24 * ~1 h <-> ~1 day
     print(f'{sys.argv[0]} @ {dt.datetime.now().strftime("%Y-%m-%d; %H:%M:%S")}')
     with serial.Serial('/dev/ttyACM1', 115200) as sPort:
         print('before syncOrExit')
@@ -44,7 +38,7 @@ if True:
         while True:
             (tns0,tns1) = struct.unpack('QQ', sPort.read(16))
             if mT.update(tns1-tns0):
-                mT.doPlot(True)
+                mT.doPlot(toFile=True, doLog=True)
                 if hT.update(mT.series.sum()):
                     hT.doPlot(True)
                     if dT.update(hT.series.sum()):

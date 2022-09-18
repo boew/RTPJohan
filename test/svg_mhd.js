@@ -6,7 +6,7 @@ function refresh() {
 	    new_img = document.createElement('img')
 	    new_img.height = "300"
 	    new_img.src = mplot
-	    old_img = document.getElementById('mplotdiv').children[0]
+	    old_img = document.getElementById('mplotdiv').children[1]
 	    old_img.replaceWith(new_img)
 	    console.log(mplot)
         })
@@ -17,7 +17,7 @@ function refresh() {
 	    new_img = document.createElement('img')
 	    new_img.height = "300"
 	    new_img.src = hplot
-	    old_img = document.getElementById('hplotdiv').children[0]
+	    old_img = document.getElementById('hplotdiv').children[1]
 	    old_img.replaceWith(new_img)
 	    console.log(hplot)
         })
@@ -27,8 +27,8 @@ function refresh() {
 	    console.log(r)
 	    new_img = document.createElement('img')
 	    new_img.height = "300"
-	    new_img.src = hplot
-	    old_img = document.getElementById('dplotdiv').children[0]
+	    new_img.src = dplot
+	    old_img = document.getElementById('dplotdiv').children[1]
 	    old_img.replaceWith(new_img)
 	    console.log(hplot)
         })
