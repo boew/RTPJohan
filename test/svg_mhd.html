@@ -8,39 +8,41 @@
     <link href="svg_mhd.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div id ="mplotdiv">
-      <h2> Real Time Minute Power Logging Graph </h2>
-      <img
-	src="mplot.svg"
-	alt="Minuteplot from matplotlib"
-	height="300"
-	/>
-    </div>
-    <div id ="hplotdiv">
-      <h2> Real Time Hour Power Logging Graph </h2>
-      <img
-	src="hplot.svg"
-	alt="Hourplot from matplotlib"
-	height="300"
-	/>
-    </div>
-    <div id ="dplotdiv">
-      <h2> Real Time Day Power Logging Graph </h2>
-      <img
-	src="dplot.svg"
-	alt="Dayplot from matplotlib"
-	height="300"
-	/>
-    </div>
-    <div id ="logdiv">    
-      <h2> Real Time Power Logging Minute Log </h2>
-      <div id="loglinkdiv">
-	<div>
-	  <h3> <a href="mlog.txt"> mlog.txt </a> </h3>
-	</div>      
-	<div>
-	  <h3> <a href="mlog.xlsx"> mlog.xlsx </a> </h3>
-	</div>      
+    <h1> Real Time Power Logging</h1>
+    <div id="topdiv"> 
+      <div id ="mplotdiv">
+	<h2> Minute Graph </h2>
+	<img
+	  src="mplot.svg"
+	  alt="Minuteplot from matplotlib"
+	  />
+      </div>
+      <div id ="hplotdiv">
+	<h2> Hour Graph </h2>
+	<img
+	  src="hplot.svg"
+	  alt="Hourplot from matplotlib"
+	  height="300"
+	  />
+      </div>
+      <div id ="dplotdiv">
+	<h2> Day Graph </h2>
+	<img
+	  src="dplot.svg"
+	  alt="Dayplot from matplotlib"
+	  height="300"
+	  />
+      </div>
+      <div id ="logdiv">    
+	<h2> Minute Logs </h2>
+	<div id="loglinkdiv">
+	  <div class="logdiv">
+	    <h3> <a href="mlog.txt"> mlog.txt </a> </h3>
+	  </div>      
+	  <div class="logdiv">
+	    <h3> <a href="mlog.xlsx"> mlog.xlsx </a> </h3>
+	  </div>      
+	</div>
       </div>
     </div>
   </body>

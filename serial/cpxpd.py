@@ -21,8 +21,8 @@ if True:
         for cs in syncBytes:
             maxCount = struct.calcsize('QQ') * 10
             while (bytes([cs]) != cr):
-                print(maxCount, bytes([cs]), cr)
                 cr = sp.read()
+                print(maxCount, bytes([cs]), cr)
                 maxCount -= 1
                 if (0 >= maxCount):
                     sys.exit('Oooops - startSync failed!')
