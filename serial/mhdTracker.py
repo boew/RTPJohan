@@ -71,6 +71,7 @@ class MhdTracker:
                 self.sdf.at[pdidx,'time'] = ""
             else:
                 pdt0 = pdt
+
         self.plot = self.sdf.plot('time','power', kind='bar')
         self.tTime = MhdTracker.mhd_t0 + dt.timedelta(milliseconds = self.acc_ns // 1e6)
         self.pTitle  = f'{self.x}plot {self.acc_cnt}@'

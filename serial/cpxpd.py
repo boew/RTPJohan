@@ -8,7 +8,7 @@ import pandas as pd
 from pathlib import Path
 import mhdTracker as MT
 
-formatString = "%Y-%m-%d %H:%M:%S"
+formatString = "%Y-%m-%d; %H:%M:%S"
 # 2022-09-11 12:12:01
 #    Y  m  d  H  M  S    
 
@@ -30,7 +30,7 @@ if True:
     mT = MT.MhdTracker('m', 16,  1, '../test/')      # 16 * ~5s <-> ~80 s  
     hT = MT.MhdTracker('h', 45, 16, '../test/')      # 45 * ~80 s <-> ~1 h 
     dT = MT.MhdTracker('d', 24, 45, '../test/')      # 24 * ~1 h <-> ~1 day
-    print(f'{sys.argv[0]} @ {dt.datetime.now().strftime("%Y-%m-%d; %H:%M:%S")}')
+    print(f'{sys.argv[0]} @ {dt.datetime.now().strftime(formatString)}')
     with serial.Serial('/dev/ttyACM1', 115200) as sPort:
         print('before syncOrExit')
         syncOrExit(sPort)
