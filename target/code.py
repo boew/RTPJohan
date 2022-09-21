@@ -20,7 +20,7 @@ downThreshold = 900
 upThreshold = 1200
 light = analogio.AnalogIn(board.LIGHT)
 t0 = 0
-    
+print('Starting Loop')
 while True:
     lv = light.value
     syncCheck()
@@ -34,7 +34,7 @@ while True:
     if (not syncReq):
         data2write = struct.pack('QQ', t0, t1)
         usb_cdc.data.write(data2write)
-    print(syncReq, t0, t1)
+    print(syncReq, t0, t1, t1-t0)
     t0 = t1
         
         
