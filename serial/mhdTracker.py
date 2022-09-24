@@ -62,8 +62,8 @@ class MhdTracker:
     def doPlot(self, toFile=False):
         if (self.plot):
             plt.close(self.plot.get_figure())
-        self.sdf = pd.DataFrame({'time': map(self.ns2time, self.series.cumsum()),
-                                 'power': map(self.ns2power, self.series)})
+        self.sdf = pd.DataFrame({'time': list(map(self.ns2time, self.series.cumsum())),
+                                 'power': list(map(self.ns2power, self.series))})
         pdt0 = None
         for pdidx in self.sdf.index:
             pdt = self.sdf.at[pdidx,'time']
