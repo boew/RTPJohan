@@ -52,7 +52,9 @@ def main(test=False):
             tt = binaryFile.read(16)
             while 16 == len(tt):
                 (tns0,tns1) = struct.unpack('QQ',tt)
+                print(tns0,tns1)
                 processBlink(tns0,tns1)
+                tt = binaryFile.read(16)
             sys.exit(0)
     else:
         with serial.Serial('/dev/ttyACM1', 115200) as sPort:

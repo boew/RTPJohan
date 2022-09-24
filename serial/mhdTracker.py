@@ -38,16 +38,17 @@ class MhdTracker:
         return (MhdTracker.mhd_t0 + dt.timedelta(milliseconds = (self.acc_ns + nano_s) // 1e6)).strftime("%H:%M")
         
     def update(self, tnsDiff):
-        if (not MhdTracker.mhd_t0):
-            MhdTracker.mhd_t0 = dt.datetime.now()
-            self.xlsxWb.active.append([0, MhdTracker.mhd_t0])
         self.series[self.i] = tnsDiff
         self.i += 1
         self.i %= self.iMax
-        if (0 == self.i):
+        if (0 == self.i):          
             self.acc_ns += self.series.sum()
             self.acc_cnt += 1
-            self.xlsxWb.active.append([0, 0, self.acc_ns, self.acc_cnt])
+            if (not MhdTracker.mhd_t0):
+                MhdTracker.mhd_t0 = dt.datetime.now()
+                self.xlsxWb.active.append([0, MhdTracker.mhd_t0, self.acc_ns, self.acc_cnt])
+            else:
+                self.xlsxWb.active.append([0, 0, self.acc_ns, self.acc_cnt])
         return (0 == self.i)    
 
     def doLogTxt(self):
