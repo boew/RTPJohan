@@ -36,19 +36,26 @@ class MhdTracker:
 
     def ns2time(self, nano_s):
         return (MhdTracker.mhd_t0 + dt.timedelta(milliseconds = (self.acc_ns + nano_s) // 1e6)).strftime("%H:%M")
-        
+
+    def ns2datetime(self, nano_s):
+        t = MhdTracker.mhd_t0 + dt.timedelta(milliseconds = (self.acc_ns + nano_s) / 1e6)
+        datetime = t.strftime(self.formatString)
+        year = t.strftime("%Y")
+        month = t.strftime("%m")
+        day = t.strftime("%d")
+        hour = t.strftime("%H")
+        minute = t.strftime("%M")
+        return [datetime, year, month, day, hour, minute]
+       
     def update(self, tnsDiff):
         self.series[self.i] = tnsDiff
         self.i += 1
         self.i %= self.iMax
-        if (0 == self.i):          
-            self.acc_ns += self.series.sum()
-            self.acc_cnt += 1
+        if (0 == self.i):
             if (not MhdTracker.mhd_t0):
                 MhdTracker.mhd_t0 = dt.datetime.now()
-                self.xlsxWb.active.append([0, MhdTracker.mhd_t0, self.acc_ns, self.acc_cnt])
-            else:
-                self.xlsxWb.active.append([0, 0, self.acc_ns, self.acc_cnt])
+            self.acc_ns += self.series.sum()
+            self.acc_cnt += 1
         return (0 == self.i)    
 
     def doLogTxt(self):
@@ -56,8 +63,14 @@ class MhdTracker:
             print(self.series, file=logfile)
 
     def doLogXlsx(self):
-        for r in self.series:
-            self.xlsxWb.active.append([r])
+        local_acc_ns = 0
+        for tns in self.series:
+            local_acc_ns += tns
+            local_t = self.ns2datetime(local_acc_ns)
+            row = local_t
+            row.insert(0,tns)
+            row.insert(1,1)
+            self.xlsxWb.active.append(row)
         self.xlsxWb.save(self.xlsxPath)
             
     def doPlot(self, toFile=False):
