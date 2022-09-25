@@ -118,10 +118,10 @@ if '__main__' == __name__ :
                     dT.doPlot(True)
 
     print(f'{sys.argv[0]} @ {dt.datetime.now().strftime(formatString)}')
-    with open('mktest2.txt','rb') as binaryFile:
+    with open('mktest4.txt','rb') as binaryFile:
         tt = binaryFile.read(16)
         while 16 == len(tt):
             (tns0,tns1) = struct.unpack('QQ',tt)
-            print(tns0,tns1)
+            #print(tns0,tns1)
             processBlink(tns0,tns1)
             tt = binaryFile.read(16)
