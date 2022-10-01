@@ -56,7 +56,7 @@ class MhdTracker:
                 MhdTracker.mhd_t0 = dt.datetime.now()
             self.acc_ns += self.series.sum()
             self.acc_cnt += 1
-        return (0 == self.i)    
+        return ((self.iMax - 1) == self.i)    
 
     def doLogTxt(self):
         with open(self.txtPath, 'a') as logfile:
