@@ -28,6 +28,8 @@ class MhdTracker:
         self.nPulsesIn = nPulsesIn
         self.series=pd.Series([0] * self.iMax)
         self.formatString = "%Y-%m-%d %H:%M:%S"
+        if (not MhdTracker.mhd_t0):
+            MhdTracker.mhd_t0 = dt.datetime.now()
         # 2022-09-11 12:12:01
         #    Y  m  d  H  M  S
 
@@ -48,15 +50,13 @@ class MhdTracker:
         return [datetime, year, month, day, hour, minute]
        
     def update(self, tnsDiff):
+        if (0 == self.i):
+            self.acc_ns += self.series.sum()
+            self.acc_cnt += 1
         self.series[self.i] = tnsDiff
         self.i += 1
         self.i %= self.iMax
-        if (0 == self.i):
-            if (not MhdTracker.mhd_t0):
-                MhdTracker.mhd_t0 = dt.datetime.now()
-            self.acc_ns += self.series.sum()
-            self.acc_cnt += 1
-        return ((self.iMax - 1) == self.i)    
+        return (0 == self.i)
 
     def doLogTxt(self):
         with open(self.txtPath, 'a') as logfile:
