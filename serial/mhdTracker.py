@@ -16,10 +16,9 @@ class MhdTracker:
         self.txtPath = Path(f'{pathP}{x}log.txt')
         self.xlsxPath = Path(f'{pathP}{x}log.xlsx')
         if (self.xlsxPath.exists()):
-            wb = load_workbook(self.xlsxPath)
-        else:
-            wb = Workbook()     
-        self.xlsxWb = wb
+            newName = "old_" + dt.datetime.now().strftime("%Y-%m-%d_%H%M%S") + self.xlsxPath.name
+            self.xlsxPath.rename(self.xlsxPath.with_name(newName))
+        self.xlsxWb = Workbook()     
         self.xlsxWb.save(self.xlsxPath)
         self.iMax=iMax
         self.i=0
@@ -70,6 +69,7 @@ class MhdTracker:
             row = local_t
             row.insert(0,tns)
             row.insert(1,1)
+            row.append(dt.datetime.now().strftime(self.formatString))
             self.xlsxWb.active.append(row)
         self.xlsxWb.save(self.xlsxPath)
             
