@@ -14,7 +14,7 @@ formatString = "%Y-%m-%d; %H:%M:%S"
 mT = ""
 tT = ""
 dT = ""
-def main(test=False):
+def main(bintest = False, txttest = False, txtstart = ""):
     global mT
     global hT
     global dT
@@ -47,7 +47,7 @@ def main(test=False):
                     dT.doPlot(True)
 
     print(f'{sys.argv[0]} @ {dt.datetime.now().strftime(formatString)}')
-    if test:
+    if bintest:
         with open(test,'rb') as binaryFile:
             tt = binaryFile.read(16)
             while 16 == len(tt):
@@ -55,6 +55,14 @@ def main(test=False):
                 print(tns0,tns1)
                 processBlink(tns0,tns1)
                 tt = binaryFile.read(16)
+            sys.exit(0)
+    elif txttest:
+        MT.MhdTracker.mhd_t0 = txtstart
+        with open(txttest,'rb') as txtFile:
+            for line in txtFile:
+                tnd = int(line)
+                print(0,tnd)
+                processBlink(0,tnd)
             sys.exit(0)
     else:
         with serial.Serial('/dev/ttyACM1', 115200) as sPort:
@@ -68,5 +76,8 @@ def main(test=False):
                 
 if ('__main__' == __name__) :
     if (2 == len(sys.argv)):
-        print(f'Test run, input from {sys.argv[1]}')
-        main(sys.argv[1])
+        print(f'Test run, binary input from {sys.argv[1]}')
+        main(bintest=sys.argv[1])
+    if (3 == len(sys.argv)):
+        print(f'Test run, text input from {sys.argv[1]}, starting at {sys.argv[2]}')
+        main(txttest=sys.argv[1], txtstart=dt.datetime.strptime(sys.argv[2], '%Y-%m-%d %H:%M:%S'))
