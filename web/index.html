@@ -1,12 +1,51 @@
 <!DOCTYPE html>
 <html lang="sv" dir="ltr">
-<head>
-<meta charset="UTF-8"/>
-<head>
-  <title>RealTimePowerJohan</title>
-</head>
-<body>
-  <h1> Real Time Power Logging </h1>
-  <a href="data/log.txt"> Data (textfil) </a>
-</body>
+  <head>
+    <meta charset="UTF-8"/>
+  <head>
+    <title>RealTimePowerJohan</title>
+    <script src="rtpjohan.js">  </script>
+    <link href="index.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <h1><a href="rtpjohan.html"> Real Time Power Logging </a> </h1>
+    <div id="topdiv"> 
+      <div id ="mplotdiv" class="plotdiv">
+	<h2> Minute Graph </h2>
+	<img
+	  src="mplot.svg"
+	  alt="Minuteplot from matplotlib"
+	  />
+      </div>
+      <div id ="hplotdiv" class="plotdiv">
+	<h2> Hour Graph </h2>
+	<img
+	  src="hplot.svg"
+	  alt="Hourplot from matplotlib"
+	  />
+      </div>
+      <div id ="dplotdiv" class="plotdiv">
+	<h2> Day Graph </h2>
+	<img
+	  src="dplot.svg"
+	  alt="Dayplot from matplotlib"
+	  />
+      </div>
+      <div class="toplogdiv">    
+	<h2> Log files </h2>
+	<div class="loglinkdiv">
+	  <div class="logdiv">
+	    <h3> <a href="mlog.xlsx"> mlog.xlsx </a> </h3>
+	    <h3> <a href="mlog.txt"> mlog.txt </a> </h3>
+	  </div>      
+	  <div class="logdiv">
+	    <h3> <a href="hlog.xlsx"> hlog.xlsx </a> </h3>
+	  </div>      
+	  <div class="logdiv">
+	    <h3> <a href="dlog.xlsx"> dlog.xlsx </a> </h3>
+	  </div>      
+	</div>
+      </div>
+    </div>
+  </body>
 </html>

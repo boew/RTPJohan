@@ -1,0 +1,8 @@
+#topdiv { display:flex; flex-wrap: wrap;}
+.logdiv {display:flex; flex-direction: column; align-items: center;}
+h1, h2 {text-align: center;}
+.loglinkdiv {width: 90%;}
+.toplogdiv {width: 90%;}
+.logdiv {width: 90%;}
+.plotdiv {width: 90%;}
+img {width: 90%;}
