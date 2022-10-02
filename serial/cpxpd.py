@@ -70,14 +70,20 @@ def main(bintest = False, txttest = False, txtstart = ""):
             syncOrExit(sPort)
             print('after syncOrExit ')
             while True:
-                (tns0,tns1) = struct.unpack('QQ', p.read(16))
+                (tns0,tns1) = struct.unpack('QQ', sPort.read(16))
                 processBlink(tns0,tns1)
 
                 
 if ('__main__' == __name__) :
-    if (2 == len(sys.argv)):
+    if (1 == len(sys.argv)):
+        print(f'Normal run, input from CPX')
+        main()
+    elif (2 == len(sys.argv)):
         print(f'Test run, binary input from {sys.argv[1]}')
         main(bintest=sys.argv[1])
-    if (3 == len(sys.argv)):
+    elif (3 == len(sys.argv)):
         print(f'Test run, text input from {sys.argv[1]}, starting at {sys.argv[2]}')
         main(txttest=sys.argv[1], txtstart=dt.datetime.strptime(sys.argv[2], '%Y-%m-%d %H:%M:%S'))
+    else:
+        print(f'Got {sys.argv}, no run.')
+        
