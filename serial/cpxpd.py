@@ -32,12 +32,8 @@ def main(bintest = False, txttest = False, txtstart = ""):
                 if (0 >= maxCount):
                     sys.exit('Oooops - startSync failed!')
 
-    mT = MT.MhdTracker('m', 16,  1, '../test/')      # 16 * ~5s <-> ~80 s  
-    hT = MT.MhdTracker('h', 45, 16, '../test/')      # 45 * ~80 s <-> ~1 h 
-    dT = MT.MhdTracker('d', 24, 45, '../test/')      # 24 * ~1 h <-> ~1 day
-
     def processBlink(tns0, tns1):
-        if mT.update(tns1-tns0):
+        if mT.update(tns1, tns0):
             mT.doPlot(toFile=True)
             mT.doLogTxt()
             mT.doLogXlsx()
@@ -48,7 +44,10 @@ def main(bintest = False, txttest = False, txtstart = ""):
 
     print(f'{sys.argv[0]} @ {dt.datetime.now().strftime(formatString)}')
     if bintest:
-        with open(test,'rb') as binaryFile:
+        mT = MT.MhdTracker('m', 16,  1, './')      # 16 * ~5s <-> ~80 s  
+        hT = MT.MhdTracker('h', 45, 16, './')      # 45 * ~80 s <-> ~1 h 
+        dT = MT.MhdTracker('d', 24, 45, './')      # 24 * ~1 h <-> ~1 day
+        with open(bintest,'rb') as binaryFile:
             tt = binaryFile.read(16)
             while 16 == len(tt):
                 (tns0,tns1) = struct.unpack('QQ',tt)
@@ -57,6 +56,9 @@ def main(bintest = False, txttest = False, txtstart = ""):
                 tt = binaryFile.read(16)
             sys.exit(0)
     elif txttest:
+        mT = MT.MhdTracker('m', 16,  1, '../test/')      # 16 * ~5s <-> ~80 s  
+        hT = MT.MhdTracker('h', 45, 16, '../test/')      # 45 * ~80 s <-> ~1 h 
+        dT = MT.MhdTracker('d', 24, 45, '../test/')      # 24 * ~1 h <-> ~1 day
         MT.MhdTracker.mhd_t0 = txtstart
         with open(txttest,'rb') as txtFile:
             for line in txtFile:
@@ -65,6 +67,9 @@ def main(bintest = False, txttest = False, txtstart = ""):
                 processBlink(0,tnd)
             sys.exit(0)
     else:
+        mT = MT.MhdTracker('m', 16,  1, '../test/')      # 16 * ~5s <-> ~80 s  
+        hT = MT.MhdTracker('h', 45, 16, '../test/')      # 45 * ~80 s <-> ~1 h 
+        dT = MT.MhdTracker('d', 24, 45, '../test/')      # 24 * ~1 h <-> ~1 day
         with serial.Serial('/dev/ttyACM1', 115200) as sPort:
             print('before syncOrExit')
             syncOrExit(sPort)

@@ -7,7 +7,6 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 class MhdTracker:
     """
     """
-    mhd_t0 = None
     def __init__(self, x, iMax, nPulsesIn, pathP='../web/'):
         self.plot = None
         self.x = x
@@ -26,11 +25,17 @@ class MhdTracker:
         self.acc_cnt=0
         self.nPulsesIn = nPulsesIn
         self.series=pd.Series([0] * self.iMax)
+        self.t01_xlsxPath = Path(f'{pathP}{x}t01.xlsx')
+        if (self.t01_xlsxPath.exists()):
+            newName = "old_" + dt.datetime.now().strftime("%Y-%m-%d_%H%M%S") + self.t01_xlsxPath.name
+            self.t01_xlsxPath.rename(self.t01_xlsxPath.with_name(newName))
+        self.t01_xlsxWb = Workbook()     
+        self.t01_xlsxWb.save(self.t01_xlsxPath)
         self.formatString = "%Y-%m-%d %H:%M:%S"
-        if (not MhdTracker.mhd_t0):
-            MhdTracker.mhd_t0 = dt.datetime.now()
         # 2022-09-11 12:12:01
         #    Y  m  d  H  M  S
+        if (not MhdTracker.mhd_t0):
+            MhdTracker.mhd_t0 = dt.datetime.now()
 
     def ns2power(self, nano_s):
         return 3.6E9 * self.nPulsesIn / nano_s
@@ -48,7 +53,10 @@ class MhdTracker:
         minute = t.strftime("%M")
         return [datetime, year, month, day, hour, minute]
        
-    def update(self, tnsDiff):
+    def update(self, tns1, tns0=0):
+        self.t01_xlsxWb.active.append([tns0, tns1])
+        self.t01_xlsxWb.save(self.t01_xlsxPath)
+        tnsDiff = tns1 - tns0
         if (0 == self.i):
             self.acc_ns += self.series.sum()
             self.acc_cnt += 1
